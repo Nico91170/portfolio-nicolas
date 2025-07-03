@@ -64,7 +64,7 @@ portfolio-nicolas/
 - **React Modal**
 - **Formspree** (pour le formulaire de contact)
 - **ESLint** (qualité du code)
-- **Déploiement** : Vercel/Netlify/Render (au choix)
+- **Déploiement** : Vercel
 
 ---
 
