@@ -66,19 +66,22 @@ function App() {
       }
     )
 
-    sectionsRef.current.forEach((section) => {
+    const sections = sectionsRef.current.slice();
+    const dividers = dividersRef.current.slice();
+
+    sections.forEach((section) => {
       observer.observe(section)
     })
 
-    dividersRef.current.forEach((divider) => {
+    dividers.forEach((divider) => {
       observer.observe(divider)
     })
 
     return () => {
-      sectionsRef.current.forEach((section) => {
+      sections.forEach((section) => {
         observer.unobserve(section)
       })
-      dividersRef.current.forEach((divider) => {
+      dividers.forEach((divider) => {
         observer.unobserve(divider)
       })
     }
@@ -128,8 +131,8 @@ function App() {
       } else {
         throw new Error('Erreur lors de l\'envoi du message');
       }
-    } catch (error) {
-      alert('Une erreur est survenue lors de l\'envoi du message. Veuillez réessayer.');
+    } catch {
+      alert('Une erreur est survenue lors de l\'envoi du message. Veuillez r\u00E9essayer.');
     } finally {
       setIsSubmitting(false);
     }
