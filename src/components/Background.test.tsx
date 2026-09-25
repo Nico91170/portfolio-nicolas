@@ -1,5 +1,6 @@
 import '../setupTests';
 import React from 'react';
+import { afterEach, test, expect, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import Background from './Background';
 

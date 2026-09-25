@@ -1,0 +1,19 @@
+# Directives d'exploration pour le portfolio de Nicolas Pires De Jesus
+User-agent: *
+Allow: /
+
+# Directives spécifiques pour les assistants et robots IA
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Déclaration du Sitemap
+Sitemap: https://portfolio-nicolas-lyart.vercel.app/sitemap.xml

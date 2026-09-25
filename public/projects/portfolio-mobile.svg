@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2d3436" />
+      <stop offset="100%" stop-color="#1e2324" />
+    </linearGradient>
+    <linearGradient id="primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e84393" />
+      <stop offset="100%" stop-color="#fd79a8" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#e84393" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#2d3436" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#b2bec3" stroke-width="1" stroke-opacity="0.08" />
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bg)" />
+  <rect width="800" height="500" fill="url(#grid)" />
+  <circle cx="400" cy="210" r="280" fill="url(#glow)" />
+
+  <!-- Window Frame -->
+  <rect x="60" y="45" width="680" height="410" rx="16" fill="#1e2324" fill-opacity="0.9" stroke="#b2bec3" stroke-width="1.5" stroke-opacity="0.25" />
+  
+  <!-- Window Header -->
+  <line x1="60" y1="90" x2="740" y2="90" stroke="#b2bec3" stroke-width="1" stroke-opacity="0.2" />
+  <circle cx="90" cy="68" r="6" fill="#e84393" />
+  <circle cx="110" cy="68" r="6" fill="#fd79a8" />
+  <circle cx="130" cy="68" r="6" fill="#b2bec3" />
+  
+  <!-- Address bar -->
+  <rect x="170" y="56" width="460" height="24" rx="6" fill="#2d3436" stroke="#b2bec3" stroke-width="1" stroke-opacity="0.25" />
+  <text x="400" y="72" font-family="monospace" font-size="12" fill="#b2bec3" text-anchor="middle">https://nicolas-portfolio.dev/projects/portfolio-mobile</text>
+
+  <!-- Graphic / Center Content -->
+  <g transform="translate(400, 205)">
+    <rect x="-55" y="-80" width="110" height="155" rx="16" fill="#2d3436" stroke="#e84393" stroke-width="2" />
+    <rect x="-18" y="-72" width="36" height="5" rx="2.5" fill="#b2bec3" fill-opacity="0.5" />
+    <rect x="-42" y="-55" width="84" height="20" rx="4" fill="url(#primary)" />
+    <rect x="-42" y="-25" width="84" height="8" rx="3" fill="#b2bec3" fill-opacity="0.4" />
+    <rect x="-42" y="-10" width="60" height="8" rx="3" fill="#b2bec3" fill-opacity="0.3" />
+    <circle cx="0" cy="55" r="8" fill="#1e2324" stroke="#b2bec3" stroke-width="1" stroke-opacity="0.4" />
+  </g>
+
+  <!-- Title & Subtitle -->
+  <text x="400" y="370" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="bold" fill="url(#primary)" text-anchor="middle">Vue Mobile Responsive &amp; PWA</text>
+  <text x="400" y="405" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" fill="#dfe6e9" text-anchor="middle">Expérience fluide sur smartphones • Mode Offline &amp; Installation</text>
+</svg>

@@ -1,10 +1,16 @@
 import '@testing-library/jest-dom';
 import Modal from 'react-modal';
+import { beforeEach, vi } from 'vitest';
 
 // Create a #root element for react-modal during tests
 const root = document.createElement('div');
 root.setAttribute('id', 'root');
 document.body.appendChild(root);
+
+beforeEach(() => {
+  localStorage.clear();
+  document.documentElement.lang = 'fr';
+});
 
 // Tell react-modal which element is the app root (silence warnings)
 Modal.setAppElement('#root');
@@ -55,3 +61,19 @@ Object.defineProperty(window, 'requestAnimationFrame', {
   configurable: true,
   value: vi.fn(() => 1)
 });
+
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  configurable: true,
+  value: vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
+

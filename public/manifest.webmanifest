@@ -1,0 +1,75 @@
+{
+  "name": "Nicolas Pires De Jesus - Portfolio Développeur Full-Stack",
+  "short_name": "Nicolas PDJ",
+  "description": "Portfolio professionnel de Nicolas Pires De Jesus, Développeur Full-Stack spécialisé en React, TypeScript, Next.js et Node.js.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#2d3436",
+  "theme_color": "#2d3436",
+  "lang": "fr-FR",
+  "categories": ["portfolio", "technology", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Projets",
+      "short_name": "Projets",
+      "description": "Explorer les réalisations et projets web",
+      "url": "/#projets",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Compétences",
+      "short_name": "Compétences",
+      "description": "Consulter les compétences techniques",
+      "url": "/#competences",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Expériences",
+      "short_name": "Expériences",
+      "description": "Parcours professionnel et alternances",
+      "url": "/#experiences",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "description": "Envoyer un message ou copier l'adresse e-mail",
+      "url": "/#contact",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import './setupTests';
 import React from 'react';
+import { test, expect } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import App from './App';
 
@@ -87,3 +88,14 @@ test('opens and closes certification modal from certification card', async () =>
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 });
+
+test('renders CV download links with correct href and download attributes', () => {
+  render(<App />);
+  const cvLinks = screen.getAllByRole('link', { name: /télécharger mon cv/i });
+  expect(cvLinks.length).toBeGreaterThanOrEqual(1);
+  cvLinks.forEach((link) => {
+    expect(link).toHaveAttribute('href', '/cv.pdf');
+    expect(link).toHaveAttribute('download', 'CV_Nicolas_Pires_De_Jesus.pdf');
+  });
+});
+

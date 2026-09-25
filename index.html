@@ -1,10 +1,111 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio Nicolas Pires De Jesus</title>
+    <title>Nicolas Pires De Jesus | Développeur Full-Stack &amp; Web</title>
+    <meta name="description" content="Portfolio de Nicolas Pires De Jesus, Développeur Full-Stack passionné, spécialisé en React, TypeScript, Next.js, Node.js et architectures web modernes et sécurisées." />
+    <meta name="author" content="Nicolas Pires De Jesus" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- PWA & Mobile Web App Meta -->
+    <meta name="theme-color" content="#2d3436" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Nicolas PDJ" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    
+    <!-- Préchargement LCP de la photo de profil -->
+    <link rel="preload" as="image" href="/profile.webp" type="image/webp" fetchpriority="high" />
+    
+    <!-- URL Canonique -->
+    <link rel="canonical" href="https://portfolio-nicolas-lyart.vercel.app/" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
+    
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Portfolio Nicolas Pires De Jesus" />
+    <meta property="og:url" content="https://portfolio-nicolas-lyart.vercel.app/" />
+    <meta property="og:title" content="Nicolas Pires De Jesus | Développeur Full-Stack" />
+    <meta property="og:description" content="Portfolio de Nicolas Pires De Jesus, Développeur Full-Stack passionné (React, Next.js, TypeScript, Node.js). Découvrez mes projets, compétences et contact." />
+    <meta property="og:image" content="https://portfolio-nicolas-lyart.vercel.app/og-image.png" />
+    <meta property="og:image:secure_url" content="https://portfolio-nicolas-lyart.vercel.app/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Nicolas Pires De Jesus - Développeur Full-Stack" />
+    <meta property="og:locale" content="fr_FR" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://portfolio-nicolas-lyart.vercel.app/" />
+    <meta name="twitter:title" content="Nicolas Pires De Jesus | Développeur Full-Stack" />
+    <meta name="twitter:description" content="Portfolio de Nicolas Pires De Jesus, Développeur Full-Stack passionné (React, Next.js, TypeScript, Node.js). Projets, expériences et contact." />
+    <meta name="twitter:image" content="https://portfolio-nicolas-lyart.vercel.app/og-image.png" />
+    <meta name="twitter:image:alt" content="Nicolas Pires De Jesus - Développeur Full-Stack" />
+    
+    <!-- Données structurées JSON-LD Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://portfolio-nicolas-lyart.vercel.app/#person",
+          "name": "Nicolas Pires De Jesus",
+          "jobTitle": "Développeur Full-Stack",
+          "description": "Développeur Full-Stack passionné, spécialisé en React, TypeScript, Next.js, Node.js et cybersécurité.",
+          "email": "nicolas.piresdejesus91170@gmail.com",
+          "url": "https://portfolio-nicolas-lyart.vercel.app/",
+          "image": "https://portfolio-nicolas-lyart.vercel.app/profile.png",
+          "sameAs": [
+            "https://github.com/Nico91170",
+            "https://www.linkedin.com/in/nicolas-pires-de-jesus/"
+          ],
+          "knowsAbout": [
+            "React",
+            "Next.js",
+            "TypeScript",
+            "JavaScript",
+            "Node.js",
+            "Express",
+            "Tailwind CSS",
+            "Docker",
+            "Keycloak",
+            "Nginx",
+            "Cybersécurité"
+          ],
+          "alumniOf": [
+            {
+              "@type": "EducationalOrganization",
+              "name": "Université Évry Paris-Saclay"
+            },
+            {
+              "@type": "EducationalOrganization",
+              "name": "Groupe Aurlom Éducation"
+            }
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://portfolio-nicolas-lyart.vercel.app/#website",
+          "url": "https://portfolio-nicolas-lyart.vercel.app/",
+          "name": "Portfolio Nicolas Pires De Jesus",
+          "description": "Portfolio officiel de Nicolas Pires De Jesus, Développeur Full-Stack.",
+          "publisher": {
+            "@id": "https://portfolio-nicolas-lyart.vercel.app/#person"
+          },
+          "inLanguage": "fr-FR"
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

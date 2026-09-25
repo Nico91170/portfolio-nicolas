@@ -1,15 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 
+interface MeasuredWord {
+    text: string;
+    isKeyword: boolean;
+    width: number;
+}
+
 interface CodeLine {
     text: string;
     x: number;
     y: number;
     opacity: number;
     speed: number;
+    words: MeasuredWord[];
 }
 
 const cppKeywords = new Set([
-    'alignas', 'alignof', 'and', 'and_eq', 'asm', 'atomic_cancel', 'atomic_commit', 'atomic_noexcept', 'auto', 'bitand', 'bitor', 'bool', 'break', 'case', 'catch', 'char', 'char16_t', 'char32_t', 'class', 'compl', 'concept', 'const', 'const_cast', 'constexpr', 'continue', 'decltype', 'default', 'delete', 'do', 'double', 'dynamic_cast', 'else', 'enum', 'explicit', 'export', 'extern', 'false', 'float', 'for', 'friend', 'goto', 'if', 'inline', 'int', 'long', 'mutable', 'namespace', 'new', 'noexcept', 'not', 'not_eq', 'nullptr', 'operator', 'or', 'or_eq', 'private', 'protected', 'public', 'register', 'reinterpret_cast', 'return', 'short', 'signed', 'sizeof', 'static', 'static_assert', 'static_cast', 'struct', 'switch', 'template', 'this', 'thread_local', 'throw', 'true', 'try', 'typedef', 'typeid', 'typename', 'union', 'unsigned', 'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor', 'xor_eq', 'std::' // Added std:: as a special keyword
+    'alignas', 'alignof', 'and', 'and_eq', 'asm', 'atomic_cancel', 'atomic_commit', 'atomic_noexcept', 'auto', 'bitand', 'bitor', 'bool', 'break', 'case', 'catch', 'char', 'char16_t', 'char32_t', 'class', 'compl', 'concept', 'const', 'const_cast', 'constexpr', 'continue', 'decltype', 'default', 'delete', 'do', 'double', 'dynamic_cast', 'else', 'enum', 'explicit', 'export', 'extern', 'false', 'float', 'for', 'friend', 'goto', 'if', 'inline', 'int', 'long', 'mutable', 'namespace', 'new', 'noexcept', 'not', 'not_eq', 'nullptr', 'operator', 'or', 'or_eq', 'private', 'protected', 'public', 'register', 'reinterpret_cast', 'return', 'short', 'signed', 'sizeof', 'static', 'static_assert', 'static_cast', 'struct', 'switch', 'template', 'this', 'thread_local', 'throw', 'true', 'try', 'typedef', 'typeid', 'typename', 'union', 'unsigned', 'using', 'virtual', 'void', 'volatile', 'wchar_t', 'while', 'xor', 'xor_eq', 'std::'
 ]);
 
 const cppSnippets = [
@@ -91,23 +98,37 @@ const Background: React.FC = () => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        // Ajuster la taille du canvas à la fenêtre
+        let animationFrameId: number;
+        let isRunning = true;
+
+        const prefersReducedMotion =
+            typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+                ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                : false;
+
+        // Ajuster la taille du canvas à la fenêtre avec debounce
+        let resizeTimeout: number;
         const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            cancelAnimationFrame(resizeTimeout);
+            resizeTimeout = requestAnimationFrame(() => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
         };
-        resizeCanvas();
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
         window.addEventListener('resize', resizeCanvas);
 
         // Créer les particules
         const createParticles = () => {
             const particles = [];
-            const particleCount = Math.min(window.innerWidth * window.innerHeight / 15000, 35);
+            const maxParticles = prefersReducedMotion ? 12 : 35;
+            const particleCount = Math.min(window.innerWidth * window.innerHeight / 15000, maxParticles);
             const colors = [
-                'rgba(99, 102, 241, 0.15)',  // Indigo
-                'rgba(139, 92, 246, 0.15)',  // Purple
-                'rgba(236, 72, 153, 0.15)',  // Pink
-                'rgba(59, 130, 246, 0.15)',  // Blue
+                'rgba(232, 67, 147, 0.22)',  // #e84393 Framboise
+                'rgba(253, 121, 168, 0.20)',  // #fd79a8 Nuance claire
+                'rgba(178, 190, 195, 0.22)',  // #b2bec3 Finition argentée
+                'rgba(232, 67, 147, 0.14)',  // #e84393
             ];
 
             for (let i = 0; i < particleCount; i++) {
@@ -117,8 +138,8 @@ const Background: React.FC = () => {
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
                     size: size,
-                    speedX: (Math.random() - 0.5) * 0.25,
-                    speedY: (Math.random() - 0.5) * 0.25,
+                    speedX: prefersReducedMotion ? 0 : (Math.random() - 0.5) * 0.25,
+                    speedY: prefersReducedMotion ? 0 : (Math.random() - 0.5) * 0.25,
                     opacity: opacity,
                     color: colors[Math.floor(Math.random() * colors.length)],
                     initialSize: size,
@@ -128,12 +149,19 @@ const Background: React.FC = () => {
             return particles;
         };
 
-        // Créer les lignes de code
+        const buildWordsForSnippet = (text: string): MeasuredWord[] => {
+            ctx.font = "16px 'Fira Code', 'Consolas', monospace";
+            return text.split(/(\s+)/g).map(w => ({
+                text: w,
+                isKeyword: cppKeywords.has(w.trim()),
+                width: ctx.measureText(w).width || 8,
+            }));
+        };
+
+        // Créer les lignes de code avec pré-calcul des largeurs
         const createCodeLines = () => {
             const lines: CodeLine[] = [];
             const numLines = Math.floor(canvas.height / 30);
-            const fontSize = 16;
-            ctx.font = `${fontSize}px 'Fira Code', 'Consolas', monospace`;
 
             for (let i = 0; i < numLines; i++) {
                 let text = '';
@@ -142,10 +170,11 @@ const Background: React.FC = () => {
                 }
                 lines.push({
                     text: text,
+                    words: buildWordsForSnippet(text),
                     x: Math.random() * canvas.width * 0.8 + canvas.width * 0.1,
                     y: canvas.height + i * 30,
                     opacity: 0,
-                    speed: Math.random() * 0.1 + 0.05,
+                    speed: prefersReducedMotion ? 0.02 : Math.random() * 0.1 + 0.05,
                 });
             }
             return lines;
@@ -163,8 +192,21 @@ const Background: React.FC = () => {
         };
         window.addEventListener('mousemove', handleMouseMove);
 
-        // Animation
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                isRunning = false;
+                cancelAnimationFrame(animationFrameId);
+            } else if (!isRunning) {
+                isRunning = true;
+                animationFrameId = requestAnimationFrame(animate);
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        // Animation haute performance (sans allocation GC ni filtres lourds)
         const animate = () => {
+            if (!isRunning) return;
+
             timeRef.current += 0.01;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -176,92 +218,81 @@ const Background: React.FC = () => {
                 Math.sin(timeRef.current) * canvas.height * 0.5 + canvas.height * 0.5
             );
 
-            gradient.addColorStop(0, 'rgba(15, 23, 42, 0.9)');
-            gradient.addColorStop(0.3, 'rgba(30, 27, 75, 0.9)');
-            gradient.addColorStop(0.6, 'rgba(55, 48, 163, 0.9)');
-            gradient.addColorStop(1, 'rgba(15, 23, 42, 0.9)');
+            gradient.addColorStop(0, 'rgba(45, 52, 54, 0.98)');
+            gradient.addColorStop(0.5, 'rgba(30, 35, 36, 0.99)');
+            gradient.addColorStop(1, 'rgba(45, 52, 54, 0.98)');
 
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Effet de brillance
-            const glowGradient = ctx.createRadialGradient(
-                mouseRef.current.x,
-                mouseRef.current.y,
-                0,
-                mouseRef.current.x,
-                mouseRef.current.y,
-                180
-            );
-            glowGradient.addColorStop(0, 'rgba(99, 102, 241, 0.08)');
-            glowGradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
-            ctx.fillStyle = glowGradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Halo interactif sous le curseur
+            if (!prefersReducedMotion && (mouseRef.current.x > 0 || mouseRef.current.y > 0)) {
+                const glowGradient = ctx.createRadialGradient(
+                    mouseRef.current.x,
+                    mouseRef.current.y,
+                    0,
+                    mouseRef.current.x,
+                    mouseRef.current.y,
+                    180
+                );
+                glowGradient.addColorStop(0, 'rgba(232, 67, 147, 0.10)');
+                glowGradient.addColorStop(1, 'rgba(232, 67, 147, 0)');
+                ctx.fillStyle = glowGradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
 
-            // Mettre à jour et dessiner les particules
+            // Mettre à jour et dessiner les particules (halo par cercle sans allocation d'objet gradient)
             particlesRef.current.forEach(particle => {
-                // Mettre à jour la position
-                particle.x += particle.speedX;
-                particle.y += particle.speedY;
+                if (!prefersReducedMotion) {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
 
-                // Rebondir sur les bords
-                if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
-                if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+                    if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
 
-                // Effet de pulsation
-                particle.size = particle.initialSize + Math.sin(timeRef.current * 2 + particle.x * 0.01) * 0.5;
-                particle.opacity = particle.initialOpacity + Math.sin(timeRef.current * 2 + particle.y * 0.01) * 0.15;
+                    particle.size = particle.initialSize + Math.sin(timeRef.current * 2 + particle.x * 0.01) * 0.5;
+                    particle.opacity = particle.initialOpacity + Math.sin(timeRef.current * 2 + particle.y * 0.01) * 0.15;
 
-                // Interaction avec la souris
-                const dx = mouseRef.current.x - particle.x;
-                const dy = mouseRef.current.y - particle.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+                    const dx = mouseRef.current.x - particle.x;
+                    const dy = mouseRef.current.y - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < 180) {
-                    const angle = Math.atan2(dy, dx);
-                    const force = (180 - distance) / 180;
-                    particle.x -= Math.cos(angle) * force * 1.5;
-                    particle.y -= Math.sin(angle) * force * 1.5;
+                    if (distance < 180) {
+                        const angle = Math.atan2(dy, dx);
+                        const force = (180 - distance) / 180;
+                        particle.x -= Math.cos(angle) * force * 1.5;
+                        particle.y -= Math.sin(angle) * force * 1.5;
+                    }
                 }
 
-                // Dessiner la particule avec un effet de lueur
+                // Cercle halo doux
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2);
+                ctx.fillStyle = particle.color;
+                ctx.fill();
+
+                // Cœur de la particule
                 ctx.beginPath();
                 ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
                 ctx.fillStyle = particle.color;
                 ctx.fill();
-
-                // Effet de lueur
-                const glow = ctx.createRadialGradient(
-                    particle.x,
-                    particle.y,
-                    0,
-                    particle.x,
-                    particle.y,
-                    particle.size * 2.5
-                );
-                glow.addColorStop(0, particle.color);
-                glow.addColorStop(1, particle.color.replace(/\d\.\d+/, '0'));
-                ctx.fillStyle = glow;
-                ctx.fill();
             });
 
-            // Mettre à jour et dessiner les lignes de code
+            // Mettre à jour et dessiner les lignes de code (rendu vectoriel direct, sans shadowBlur)
             ctx.font = "16px 'Fira Code', 'Consolas', monospace";
             ctx.textBaseline = 'alphabetic';
 
             codeLinesRef.current.forEach(line => {
                 line.y -= line.speed;
 
-                // Gestion de l'opacité pour un effet de fondu en entrée/sortie
                 if (line.y > canvas.height - 100) {
-                    line.opacity = Math.min(0.4, (canvas.height - line.y) / 100 * 0.4); // Augmenter l'opacité max
+                    line.opacity = Math.min(0.4, (canvas.height - line.y) / 100 * 0.4);
                 } else if (line.y < 100) {
-                    line.opacity = Math.min(0.4, line.y / 100 * 0.4); // Augmenter l'opacité max
+                    line.opacity = Math.min(0.4, line.y / 100 * 0.4);
                 } else {
-                    line.opacity = 0.4; // Pleine opacité au milieu
+                    line.opacity = 0.4;
                 }
 
-                // Réinitialiser la ligne quand elle sort de l'écran par le haut
                 if (line.y < -20) {
                     line.y = canvas.height + Math.random() * 30;
                     let newText = '';
@@ -269,47 +300,33 @@ const Background: React.FC = () => {
                         newText = cppSnippets[Math.floor(Math.random() * cppSnippets.length)];
                     }
                     line.text = newText;
+                    line.words = buildWordsForSnippet(newText);
                     line.x = Math.random() * canvas.width * 0.8 + canvas.width * 0.1;
                     line.opacity = 0;
-                    line.speed = Math.random() * 0.1 + 0.05;
+                    line.speed = prefersReducedMotion ? 0.02 : Math.random() * 0.1 + 0.05;
                 }
 
                 let currentX = line.x;
-                const words = line.text.split(/(\s+)/g);
 
-                words.forEach(word => {
-                    const trimmedWord = word.trim();
-                    const isKeyword = cppKeywords.has(trimmedWord);
-
-                    // Couleurs ajustées pour un meilleur contraste
-                    ctx.fillStyle = `rgba(${isKeyword ? '128, 200, 255' : '230, 230, 230'}, ${line.opacity})`;
-
-                    // Ajouter un léger effet d'ombre
-                    ctx.shadowColor = `rgba(0, 0, 0, ${line.opacity * 0.8})`; // Ombre plus opaque avec le texte
-                    ctx.shadowBlur = 3; // Léger flou
-                    ctx.shadowOffsetX = 1;
-                    ctx.shadowOffsetY = 1;
-
-                    ctx.fillText(word, currentX, line.y);
-                    currentX += ctx.measureText(word).width;
+                line.words.forEach(word => {
+                    ctx.fillStyle = `rgba(${word.isKeyword ? '232, 67, 147' : '178, 190, 195'}, ${line.opacity})`;
+                    ctx.fillText(word.text, currentX, line.y);
+                    currentX += word.width;
                 });
-
-                // Réinitialiser les propriétés d'ombre pour les autres éléments du canvas
-                ctx.shadowColor = 'rgba(0, 0, 0, 0)';
-                ctx.shadowBlur = 0;
-                ctx.shadowOffsetX = 0;
-                ctx.shadowOffsetY = 0;
             });
 
-            requestAnimationFrame(animate);
+            animationFrameId = requestAnimationFrame(animate);
         };
 
-        animate();
+        animationFrameId = requestAnimationFrame(animate);
 
         // Nettoyage
         return () => {
+            isRunning = false;
+            cancelAnimationFrame(animationFrameId);
             window.removeEventListener('resize', resizeCanvas);
             window.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, []);
 

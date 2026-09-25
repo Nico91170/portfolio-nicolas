@@ -1,0 +1,32 @@
+# Nicolas Pires De Jesus - Portfolio & Profil Développeur
+
+> Portfolio officiel : https://portfolio-nicolas-lyart.vercel.app/
+> GitHub : https://github.com/Nico91170
+> LinkedIn : https://www.linkedin.com/in/nicolas-pires-de-jesus/
+
+## À propos
+Nicolas Pires De Jesus est un développeur web et logiciel passionné, spécialisé dans la conception d'applications web modernes, réactives, performantes et sécurisées.
+
+## Compétences Techniques
+
+### Front-End
+- React (React 19), TypeScript, JavaScript (ESNext)
+- HTML5, CSS3, Tailwind CSS, Responsive Design, Animations CSS
+- Architecture de composants réutilisables, Accessibilité (a11y), Vitest, Testing Library
+
+### Back-End & Bases de données
+- Node.js, Express, Serverless Functions (Vercel)
+- APIs RESTful, validation de données, sécurité des formulaires et protection anti-spam (Honeypot, Rate Limiting)
+- MongoDB, SQL, MCD/MLD
+
+### DevOps, Outils & Environnements
+- Git, GitHub, Vercel (CI/CD et déploiement continu)
+- Docker, Keycloak, Nginx, n8n, Linux (Ubuntu)
+- Méthodologies agiles (Scrum), POO, UML, SysML, Tests Unitaires
+
+## Projets Principaux
+- **Portfolio Web Interactif** : Portfolio avec thème sombre/clair, fond dynamique animé, API serverless sécurisée et respect des normes RGPD.
+- **Plateforme E-commerce** : Application web complète avec React, Node.js, Express et MongoDB incluant panier, gestion des commandes et authentification.
+
+## Contact
+- Formulaire de contact sécurisé disponible directement sur le portfolio : https://portfolio-nicolas-lyart.vercel.app/#contact

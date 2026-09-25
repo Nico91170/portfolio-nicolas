@@ -1,5 +1,6 @@
 import '../setupTests';
 import React from 'react';
+import { test, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ProjectModal from './ProjectModal';
 
@@ -15,8 +16,8 @@ const sampleProject = {
   codeLink: 'https://code.example',
   demoLink: 'https://demo.example',
   additionalMedia: [
-    { url: '/extra1.jpg', type: 'image', caption: 'Extra 1' },
-    { url: '/video.mp4', type: 'video', caption: 'Video sample' }
+    { url: '/extra1.jpg', type: 'image' as const, caption: 'Extra 1' },
+    { url: '/video.mp4', type: 'video' as const, caption: 'Video sample' }
   ],
   challenges: [
     { title: 'Perf', description: 'Optimize animations' }
